@@ -8,7 +8,7 @@ import argparse
 """Returns the results of a speedtest"""
 def run_speed_test(server = None):
     test = speedtest.Speedtest()
-    
+
     # Run tests
     if server == None:
         server = test.get_best_server()
@@ -34,7 +34,7 @@ def write_to_csv(file_name, data, mode = 'a'):
 def main(interval = 30):
     file_name = "speedtest_results.csv"
     
-    if not os.path.isfile("speedtest_results.csv"): write_to_csv(file_name, ["datetime", "ping", "download", "upload", "server"], mode = 'w')
+    if not os.path.isfile("speedtest_results.csv"): write_to_csv(file_name, ["datetime", "ping", "download", "upload", "server", "other"], mode = 'w')
 
     while True:
         try:
@@ -50,6 +50,8 @@ def main(interval = 30):
             time.sleep(interval * 60)
         except Exception as e:
             print("Running test failed because: ", e)
+            to_write = [str(datetime.datetime.now()), "", "", "", "", e]
+            write_to_csv(file_name, to_write)
             print("Will try again in 3 minutes...")
             time.sleep(3 * 60)
 
